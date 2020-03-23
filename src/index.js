@@ -38,15 +38,20 @@ void (async () => {
                     const nombre = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > p.msg1 > b').textContent);
                     const materia = nombre.substring(1, nombre.length);
         
-                    const profesor = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)').textContent);
+                    // const profesor = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)').textContent);
 
                     let nrc_ant = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > p:nth-child(2)').textContent);
         
                     for (let i = nrc_ant.length-2; i >= nrc_ant.length-5; i--) {
                         nrc_ant1 = nrc_ant.substring(i, i+1) + nrc_ant1;
                     }
-
-                    console.log(departamentos[i].nombre + ',' + materia + ','+ profesor + ',' + nrc_ant1);
+                    
+                    for (var index = 2; index < 300; index++) {
+                        const profesor = await page.evaluate((index) => {
+                            return document.querySelector(`#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(${index}) > td:nth-child(3)`).textContent;
+                        }, index);
+                        console.log(departamentos[i].nombre + ',' + materia + ','+ profesor + ',' + nrc_ant1);
+                    }
         
                     if (nrc_ant1 == nrc_ant2) {
                         sw++;
@@ -56,7 +61,7 @@ void (async () => {
 
                     await page.waitFor(1000);
                   } catch (error) {
-                    console.log("The element didn't appear.");
+                    // console.log(`The element didn't appear: ${error}`);
                   }
                 //await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b')
     
