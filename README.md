@@ -1,6 +1,6 @@
 # UNScraper
 
-Program that extracts the names, professors and NRC of the undergraduate subjects from Universidad del Norte's page.
+A program that extracts the names, professors and NRC of the undergraduate subjects from Universidad del Norte's page.
 
 ## Project Setup
 
@@ -16,11 +16,13 @@ Program that extracts the names, professors and NRC of the undergraduate subject
     npm start
 
 ## Outputs
-The program's outputs are .txt files created in the "outputs" folder in root directory. Every file contain info in the following structure:
+The program's outputs are .txt files created in the "outputs" folder in the root directory. Every file contains info in the following structure:
 
 > "Department name", "Subject", "Professor", "NRC"
 
-Every .txt file contains a different department with every subject and its respective professor and NRC.
+Every .txt file contains a different department with every subject with its respective professor and NRC.
+
+**Important: You have to create a folder called "outputs" in the root directory. Otherwise, it's going to fail the .txt file creation.**
 
 ## Check List
 
