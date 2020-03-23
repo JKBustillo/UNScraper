@@ -22,8 +22,6 @@ The program's outputs are .txt files created in the "outputs" folder in the root
 
 Every .txt file contains a different department with every subject with its respective professor and NRC.
 
-**Important: You have to create a folder called "outputs" in the root directory. Otherwise, it's going to fail the .txt file creation.**
-
 ## Check List
 
  - [x] Subjects

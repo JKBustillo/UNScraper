@@ -4,6 +4,8 @@ const departamentos = require('../constants/departamentos');
 
 void (async () => {
     try {
+        fs.mkdirSync('outputs', { recursive: true });
+
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         const search_SELECTOR = '#buscar_nrc';
