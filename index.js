@@ -1,25 +1,25 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer');
 
 void (async () => {
     try {
-        const browser = await puppeteer.launch()
-        const page = await browser.newPage()
-        const search_SELECTOR = '#buscar_nrc'
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        const search_SELECTOR = '#buscar_nrc';
 
-        await page.goto('https://guayacan.uninorte.edu.co/registro_pruebas/consulta_horarios.asp')
+        await page.goto('https://guayacan.uninorte.edu.co/registro_pruebas/consulta_horarios.asp');
 
-        await page.select('#periodo', '201910')
-        await page.select('#nivel', 'PR')
-        await page.select('#departamento', '0047')
-        await page.click(search_SELECTOR)
+        await page.select('#periodo', '201910');
+        await page.select('#nivel', 'PR');
+        await page.select('#departamento', '0047');
+        await page.click(search_SELECTOR);
 
-        await page.waitFor(1000)
+        await page.waitFor(1000);
 
-        let nrc_ant2 = '0'
-        let nrc_ant1 = '1' 
-        let sw = 0
+        let nrc_ant2 = '0';
+        let nrc_ant1 = '1' ;
+        let sw = 0;
 
-        const departamentos = []
+        const departamentos = [];
 
         departamentos[0] = 'Dpto. Arquitectura y Urbanismo'
         departamentos[1] = 'Dpto. Ciencias Básicas Médicas'
@@ -56,22 +56,22 @@ void (async () => {
         departamentos[32] = 'Dpto. Eléctrica-Electrónica'
 
         for (let i = 0; i < departamentos.length; i++) {
-            nrc_ant2 = '0'
-            nrc_ant1 = '1' 
-            sw = 0
+            nrc_ant2 = '0';
+            nrc_ant1 = '1';
+            sw = 0;
             while (sw < 3) {
-                nrc_ant2 = nrc_ant1
-                nrc_ant1 = ''
-                await page.click('#programa')
-                await page.keyboard.press('ArrowDown')
-                await page.keyboard.press('Enter')
+                nrc_ant2 = nrc_ant1;
+                nrc_ant1 = '';
+                await page.click('#programa');
+                await page.keyboard.press('ArrowDown');
+                await page.keyboard.press('Enter');
     
-                await page.waitFor(1000)
+                await page.waitFor(1000);
 
                 try {
-                    await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b', { timeout: 5000 })
+                    await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b', { timeout: 5000 });
                     const nombre = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > p.msg1 > b').textContent);
-                    const materia = nombre.substring(1, nombre.length)
+                    const materia = nombre.substring(1, nombre.length);
         
                     const profesor = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)').textContent);
 
@@ -81,15 +81,15 @@ void (async () => {
                         nrc_ant1 = nrc_ant.substring(i, i+1) + nrc_ant1;
                     }
 
-                    console.log(departamentos[i] + ',' + materia + ','+ profesor + ',' + nrc_ant1)
+                    console.log(departamentos[i] + ',' + materia + ','+ profesor + ',' + nrc_ant1);
         
                     if (nrc_ant1 == nrc_ant2) {
-                        sw++
+                        sw++;
                     }else{
-                        sw = 0
+                        sw = 0;
                     }
                   } catch (error) {
-                    console.log("The element didn't appear.")
+                    console.log("The element didn't appear.");
                   }
                 //await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b')
     
@@ -98,14 +98,14 @@ void (async () => {
                 //console.log(nrc_ant1)
                 //console.log('')
             }
-            await page.click('#form_nivel')
-            await page.keyboard.press('ArrowDown')
-            await page.keyboard.press('Enter')
+            await page.click('#form_nivel');
+            await page.keyboard.press('ArrowDown');
+            await page.keyboard.press('Enter');
         }
 
-        await browser.close()
+        await browser.close();
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 
 
