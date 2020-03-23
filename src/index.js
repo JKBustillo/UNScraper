@@ -16,6 +16,7 @@ void (async () => {
 
         await page.waitFor(1000);
 
+        var arrayGlobal = [];
         let nrc_ant2 = '0';
         let nrc_ant1 = '1' ;
         let sw = 0;
@@ -24,25 +25,23 @@ void (async () => {
             nrc_ant2 = '0';
             nrc_ant1 = '1';
             sw = 0;
-            while (sw < 3) {
+            while (sw < 5) {
                 nrc_ant2 = nrc_ant1;
                 nrc_ant1 = '';
                 await page.click('#programa');
                 await page.keyboard.press('ArrowDown');
                 await page.keyboard.press('Enter');
     
-                await page.waitFor(1000);
+                await page.waitFor(1500);
 
                 try {
                     await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b', { timeout: 5000 });
                     const nombre = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > p.msg1 > b').textContent);
                     const materia = nombre.substring(1, nombre.length);
-        
-                    // const profesor = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(2) > td:nth-child(3)').textContent);
 
                     let nrc_ant = await page.evaluate(() => document.querySelector('#acreditaciones_resultado > div > div > p:nth-child(2)').textContent);
         
-                    for (let i = nrc_ant.length-2; i >= nrc_ant.length-5; i--) {
+                    for (let i = nrc_ant.length-2; i >= nrc_ant.length-6; i--) {
                         nrc_ant1 = nrc_ant.substring(i, i+1) + nrc_ant1;
                     }
                     
@@ -50,25 +49,22 @@ void (async () => {
                         const profesor = await page.evaluate((index) => {
                             return document.querySelector(`#acreditaciones_resultado > div > div > table > tbody > tr:nth-child(${index}) > td:nth-child(3)`).textContent;
                         }, index);
-                        console.log(departamentos[i].nombre + ',' + materia + ','+ profesor + ',' + nrc_ant1);
-                    }
-        
-                    if (nrc_ant1 == nrc_ant2) {
-                        sw++;
-                    }else{
-                        sw = 0;
+                        let cadena = `${departamentos[i].nombre}, ${materia}, ${profesor}, ${nrc_ant1}`;
+                        if (arrayGlobal.indexOf(cadena) == -1) {
+                            arrayGlobal.push(cadena);
+                            console.log(cadena);
+                        }
+                        if (nrc_ant1 == nrc_ant2) {
+                            sw++;
+                        }else{
+                            sw = 0;
+                        }
                     }
 
                     await page.waitFor(1000);
-                  } catch (error) {
+                 } catch (error) {
                     // console.log(`The element didn't appear: ${error}`);
-                  }
-                //await page.waitForSelector('#acreditaciones_resultado > div > div > p.msg1 > b')
-    
-                
-    
-                //console.log(nrc_ant1)
-                //console.log('')
+                }
             }
             await page.click('#form_nivel');
             await page.keyboard.press('ArrowDown');
