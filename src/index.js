@@ -1,9 +1,10 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 const departamentos = require('../constants/departamentos');
 
 void (async () => {
     try {
-        const browser = await puppeteer.launch({headless: false});
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         const search_SELECTOR = '#buscar_nrc';
 
@@ -16,12 +17,12 @@ void (async () => {
 
         await page.waitFor(1000);
 
-        var arrayGlobal = [];
         let nrc_ant2 = '0';
         let nrc_ant1 = '1' ;
         let sw = 0;
 
         for (let i = 0; i < departamentos.length; i++) {
+            var arrayGlobal = [];
             nrc_ant2 = '0';
             nrc_ant1 = '1';
             sw = 0;
@@ -56,25 +57,32 @@ void (async () => {
                         }
                         if (nrc_ant1 == nrc_ant2) {
                             sw++;
-                        }else{
+                        } else {
                             sw = 0;
                         }
                     }
-
                     await page.waitFor(1000);
-                 } catch (error) {
+                } catch (error) {
                     // console.log(`The element didn't appear: ${error}`);
                 }
             }
+
+            for (let j = 0; j < arrayGlobal.length; j++) {
+                fs.appendFile(`outputs/${i} - ${departamentos[i].nombre}.txt`, `${arrayGlobal[j]}\n`, (err) => {
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                    //file written successfully
+                })
+            }
+
             await page.click('#form_nivel');
             await page.keyboard.press('ArrowDown');
             await page.keyboard.press('Enter');
         }
-
         await browser.close();
     } catch (error) {
         console.log(error);
     }
-
-
-})()
+})();
